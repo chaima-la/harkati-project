@@ -1,6 +1,8 @@
-import express from "express";
-import cors from "cors";
-import dotenv from "dotenv";
+import express from "express"
+import cors from "cors"
+import dotenv from "dotenv"
+import { testDBConnection } from "./config/db.js"
+import PersonRouter from "./routes/personRoutes.js"
 
 dotenv.config();
 
