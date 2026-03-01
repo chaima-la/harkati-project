@@ -1,28 +1,24 @@
-import pkg from "pg"
-import dotenv from "dotenv"
+import pg from "pg";
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
-const { Pool } = pkg
+const { Pool } = pg;
 
-const pool = new Pool({
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  host: process.env.DB_HOST,
-  port: process.env.DB_PORT,
-  database: process.env.DB_NAME,
-})
+export const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+});
 
-export const testDBConnection = async () => {
-  try {
-    const res = await pool.query("SELECT NOW()")
-    console.log("✅ PostgreSQL Connected")
-    console.log("🕒 DB Time:", res.rows[0].now)
-  } catch (err) {
-    console.error("❌ DB Connection Failed")
-    console.error(err.message)
-    process.exit(1) // stop server if DB fails
-  }
-}
+export const testDBConnection = async() => {
+    try {
+        const res = await pool.query("SELECT current_database()");
+        console.log("✅ CONNECTED TO DB:", res.rows[0]);
 
-export default pool
+        const dbs = await pool.query("SELECT datname FROM pg_database ORDER BY datname;");
+        console.log("📌 DATABASES:", dbs.rows.map(r => r.datname));
+    } catch (err) {
+        console.error("❌ FULL ERROR:");
+        console.error(err);
+        process.exit(1);
+    }
+};

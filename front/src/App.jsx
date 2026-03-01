@@ -1,14 +1,19 @@
-import { Routes, Route } from "react-router-dom"
-import Person from "./pages/Person"
-import Student from "./pages/Student"
+import { Routes, Route, Navigate } from "react-router-dom"
+import StaffList from "./pages/StaffList"
+import StaffDetails from "./pages/StaffDetails"
 
-function App() {
+export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Person />} />
-      <Route path="/student" element={<Student />} />
+      {/* HOME */}
+      <Route path="/" element={<Navigate to="/staff" replace />} />
+
+      {/* STAFF */}
+      <Route path="/staff" element={<StaffList />} />
+      <Route path="/staff/:identifier" element={<StaffDetails />} />
+
+      {/* optional: if someone types random url */}
+      <Route path="*" element={<Navigate to="/staff" replace />} />
     </Routes>
   )
 }
-
-export default App
